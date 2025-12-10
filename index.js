@@ -8,6 +8,7 @@ const seven= document.querySelector('#seven');
 const eight= document.querySelector('#eight');
 const nine= document.querySelector('#nine');
 const zero= document.querySelector('#zero');
+
 const plus= document.querySelector('#plus');
 const minus= document.querySelector('#minus');
 const multiply= document.querySelector('#multiply');
