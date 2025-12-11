@@ -1,95 +1,63 @@
-const numberButton= document.querySelectorAll(".number")
-const operatorButton= document.querySelectorAll(".operator")
+const numberButton = document.querySelectorAll(".number");
+const operatorButton = document.querySelectorAll(".operator");
 
-const equal= document.querySelector('#equal');
-const clear= document.querySelector('#clear');
-const dot= document.querySelector('#dot');
-const display=document.querySelector('#result');
+const equal = document.querySelector("#equal");
+const clear = document.querySelector("#clear");
+const dot = document.querySelector("#dot");
+const del = document.querySelector("#del");
+const display = document.querySelector("#result");
 
-let firstNum=''
-let secondNum=''
-let operator=''
-let result=''
+let expression = ""; // Store full expression as string
 
-function appendNumber(num){
-    if (operator===""){
-        firstNum+=num;
-        display.value+=num;
-    }
-    else{
-        secondNum+=num;
-        display.value+=num;
-    }
+function appendNumber(num) {
+    expression += num;
+    display.value = expression;
 }
 
-function appendOperator(oper){
-    operator=oper;
-    display.value+=oper;
+function appendOperator(oper) {
+    if ("+-*/%".includes(expression.at(-1))) {
+        expression=expression.slice(0,-1);
+    }
+
+    expression += oper;
+    display.value = expression;
 }
 
-numberButton.forEach(btn=>{
-    btn.addEventListener('click',()=>{
+numberButton.forEach(btn => {
+    btn.addEventListener("click", () => {
         appendNumber(btn.textContent);
-    })
-})
+    });
+});
 
-operatorButton.forEach(op=>{
-    op.addEventListener('click',()=>{
+operatorButton.forEach(op => {
+    op.addEventListener("click", () => {
         appendOperator(op.textContent);
-    })
-})
+    });
+});
 
-dot.addEventListener('click',()=>{
-    if (operator===""){
-        firstNum+=dot.textContent;
-        display.value+=dot.textContent;
-    }
-    else{
-        secondNum+=dot.textContent;
-        display.value+=dot.textContent;
-    }
-})
+dot.addEventListener("click", () => {
+    if (expression.at(-1) === ".") return; 
+    expression += ".";
+    display.value = expression;
+});
 
-equal.addEventListener('click',()=>{
-    if (operator==="+"){
-        result= Number(firstNum) + Number(secondNum)
+equal.addEventListener("click", () => {
+    try {
+        let result = eval(expression); 
+        display.value = result;
+        expression = String(result);
+    } catch (err) {
+        display.value = "Error";
+        expression = "";
     }
-    else if(operator==="-"){
-        result= Number(firstNum) - Number(secondNum)
-    }
-    else if(operator==="*"){
-        result= Number(firstNum) * Number(secondNum)
-    }
-    else if(operator==="/"){
-        result= Number(firstNum)/Number(secondNum)
-    } 
-    else if(operator==="%"){
-        result= Number(firstNum) % Number(secondNum)
-    }
+});
 
-    display.value=result;
-    firstNum=""
-    secondNum=""
-    firstNum=result;
-    operator="";
-})
+clear.addEventListener("click", () => {
+    expression = "";
+    display.value = "";
+});
 
-clear.addEventListener('click',()=>{
-    display.value="";
-    firstNum="";
-    secondNum="";
-    operator="";
-    result="";
-})
-
-del.addEventListener('click',()=>{
-    display.value=display.value.slice(0,-1);
-    if (operator===""){
-        firstNum=firstNum.slice(0,-1);
-    }
-    else{
-        secondNum=secondNum.slice(0,-1);
-    }
-})
-
-
+del.addEventListener("click", () => {
+    expression = expression.slice(0, -1);
+    display.value = expression;
+});
